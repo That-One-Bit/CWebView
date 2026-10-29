@@ -1,0 +1,16 @@
+<html><body>
+<div><div><div>deep nesting</div></div></div>
+<p>unclosed paragraph
+<div>interleaved close</div>
+<h1></h1>
+<template>ignored template</template>
+<script>var x = "<p>not html</p>";</script>
+<img>
+<img src="missing.png">
+<a><div>link wrapping a block</div></a>
+<select><option>Only</option></select>
+<div style="width: 9999px;">too wide</div>
+<div style="font-size: 0.5em;"><span>tiny <b>bold tiny</b></span></div>
+<p>Entities &amp; symbols &lt;tag&gt; stay literal.</p>
+<button>btn</button><button>btn2</button><button>btn3</button>
+</body></html>

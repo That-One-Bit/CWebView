@@ -1,0 +1,20 @@
+CwvScroll:
+  attributes: 0
+  process_image: false
+  imagemodule: false
+  version:
+    major: 1
+    minor: 0
+  main:
+    start: module_start
+    stop: module_stop
+  libraries:
+    cwv_scroll_library:
+      syscall: false
+      version: 0x1
+      functions:
+        - cwv_scroll_initialize
+        - cwv_scroll_update
+        - cwv_scroll_take_delta
+        - cwv_scroll_is_dragging
+        - cwv_scroll_reset

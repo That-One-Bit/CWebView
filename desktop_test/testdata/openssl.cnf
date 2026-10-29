@@ -1,0 +1,6 @@
+# CWebView runtime OpenSSL configuration.
+#
+# The VitaSDK OpenSSL port can otherwise retain the build-time OPENSSLDIR
+# (for example /usr/local/vitasdk/arm-vita-eabi/ssl). CWebView sets
+# OPENSSL_CONF to this application-local file before libcurl initializes.
+# Keep this intentionally minimal so OpenSSL uses its built-in defaults.

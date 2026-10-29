@@ -1,0 +1,5 @@
+assets/font.ttf is DejaVu Sans (Book), from the DejaVu fonts project.
+DejaVu fonts are free to use, redistribute and embed (Bitstream Vera
+license + Permission to Redistribute license; see
+https://dejavu-fonts.github.io/ ).  It is bundled so the engine can
+render text on consoles with no system font (Wii U, Wii).

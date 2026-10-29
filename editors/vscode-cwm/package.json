@@ -1,0 +1,25 @@
+{
+  "name": "cwmenu-language",
+  "displayName": "CWMenu Language Support",
+  "description": "Syntax highlighting, semantic tokens, diagnostics, hover and completions for CWebView CWMenu scripts (.cwm).",
+  "version": "0.1.0",
+  "publisher": "thebyteproject",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Programming Languages", "Linters"],
+  "keywords": ["cwmenu", "cwebview", "menu-dsl"],
+  "main": "./extension.js",
+  "activationEvents": ["onLanguage:cwm"],
+  "contributes": {
+    "languages": [{
+      "id": "cwm", "aliases": ["CWMenu", "cwmenu"], "extensions": [".cwm"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{ "language": "cwm", "scopeName": "source.cwm", "path": "./syntaxes/cwm.tmLanguage.json" }],
+    "snippets": [{ "language": "cwm", "path": "./snippets/cwm.json" }],
+    "configuration": { "title": "CWMenu", "properties": {
+      "cwmenu.diagnostics.unknownKeys": { "type": "boolean", "default": true, "description": "Warn about unknown CWMenu element keys." },
+      "cwmenu.diagnostics.unknownActions": { "type": "boolean", "default": false, "description": "Warn about action names not found in the bundled host-action catalog. App-defined actions are often valid, so this is off by default." }
+    }}
+  }
+}

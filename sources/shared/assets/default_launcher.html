@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- CWebView shared default launcher template.
+     This is the cross-platform source of truth; a platform build may
+     substitute {{APP_NAME}} and {{WEBPAGE}} and stage a generated copy.
+     Keep markup/CSS within the engine's supported feature set. Edit this
+     shared template rather than adding console-specific copies. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{APP_NAME}}</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #15171a; color: #f2f2f2; }
+  body { text-align: center; font-family: sans-serif; }
+  .card { margin: 64px 40px; padding: 28px; background: #24272c; text-align: center; }
+  .card h1 { margin: 0 0 12px; font-size: 2em; }
+  .card p { margin: 0 0 24px; color: #c8ccd1; }
+  .open { display: inline-block; padding: 12px 22px; margin: 6px;
+          background: #3d78c9; color: #fff; text-decoration: none; }
+  .open:active { background: #2d5a98; }
+  .controls { margin: 20px 0 0; padding: 14px; background: #1b1e23; text-align: left; }
+  .controls h2 { margin: 0 0 8px; font-size: 1.2em; }
+  .controls p { margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>{{APP_NAME}}</h1>
+    <p>CWebView application</p>
+    <a class="open" href="{{WEBPAGE}}" cwv-target="app">Open application</a>
+    <div class="controls">
+      <h2 id="controls-title">Controls</h2>
+      <p id="controls-text">Use the device's normal pointer or touch input. Open CWMenu for settings.</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var platform = (window.navigator && navigator.platform) ? navigator.platform : "Unknown platform";
+      var controls = "Use the device's normal pointer or touch input. Open CWMenu for settings.";
+      if (platform.indexOf("Vita") >= 0) {
+        controls = "Front touchscreen: touch and drag page content. Rear touchpad: optional visual pointer (Settings > Controls). D-pad: move focus. Cross: activate focused controls. The rear cursor is visual; front touch remains the primary direct input.";
+      } else if (platform.indexOf("Wii U") >= 0) {
+        controls = "Use the GamePad touch/pointer input where available. D-pad: navigate menus. A: activate; B: back/cancel. CWMenu contains settings and navigation. Some mappings depend on the controller/build configuration.";
+      } else if (platform.indexOf("Wii") >= 0) {
+        controls = "Wii Remote IR: point; A: activate. D-pad: menu navigation/scroll. HOME: open the native menu. Exact mappings depend on the controller and build.";
+      } else if (platform.indexOf("Windows") >= 0) {
+        controls = "Mouse move/click: pointer and activate. Right-click or F1: CWMenu. F11: fullscreen. Wheel: scroll. Ctrl+wheel or Ctrl+= / Ctrl+-: zoom; Ctrl+0: reset. Tab: focus cycle. Enter/Space: activate. Esc: clear focus. F5 or Ctrl+R: reload.";
+      }
+      document.getElementById("controls-title").textContent = "Controls — " + platform;
+      document.getElementById("controls-text").textContent = controls;
+    }());
+  </script>
+</body>
+</html>

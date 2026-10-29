@@ -1,0 +1,31 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: #fafafa; color: #222; }
+  h1 { color: #c33; font-size: 1.4em; margin-top: 4px; }
+  .card { border: 1px dashed green; padding: 6px; }
+  #hero { border: 3px double #112233; overflow: hidden; }
+  span.bad { color: red; }
+  div > p, .note { text-align: center; }
+  p { display: block; width: 80%; }
+  .hidden { display: none; }
+  .ghost { visibility: hidden; }
+  .tbl { border-collapse: collapse; }
+</style>
+</head>
+<body class="page">
+<h1>Styled page</h1>
+<div class="card" id="first">
+  <p>Centered via selector div &gt; p.</p>
+  <span class="bad">red span</span><span class="hidden">invisible</span>
+  <span class="bad">red span</span><span class="hidden">invisible</span>
+</div>
+<div id="hero">Hero box</div>
+<a class="linky" href="other.html" cwv-target="app">link with active style</a>
+<div class="note">note text centered</div>
+<div style="margin: 5px 10px 15px 20px; padding: 1px 2px 3px 4px; font-size: 12px;">shorthand box</div>
+<div style="border: 2px dotted #123456; border-width: 4px;">border shorthand</div>
+<div style="overflow-x: scroll; overflow-y: auto;">overflow page</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html cwv-control-mode="browser">
+<head><meta charset="utf-8"><title>DPAD Focus Test</title>
+<style>
+body { margin: 0; font-family: sans-serif; }
+.card { padding: 14px; margin: 10px; border: 1px solid #888; }
+button, a { margin: 6px; padding: 8px 12px; }
+</style></head>
+<body>
+<div class="card">
+  <h1>DPAD focus</h1>
+  <p>This paragraph is not a focus target.</p>
+  <div>
+    <p>Neither is this nested paragraph.</p>
+    <button id="one"><span>Button One</span><p>Nested text must not become another stop.</p></button>
+  </div>
+  <div>
+    <a href="#two"><span>Link Two</span><p>Nested content must not become another stop.</p></a>
+  </div>
+  <div>
+    <button id="three">Button Three</button>
+  </div>
+  <select id="choice"><option>First</option><option>Second</option><option>Third</option></select>
+  <button disabled>Disabled button (skip)</button>
+  <button tabindex="2">Tabindex 2</button>
+  <button tabindex="1">Tabindex 1</button>
+</div>
+</body></html>

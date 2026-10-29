@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><title>TS page</title></head><body>
+<div id="ts">typescript probe</div>
+<script type="text/typescript">
+  interface Config { name: string; level: number }
+  enum Mode { Off, On = 2, Named = "n" }
+  type Id = string | number;
+  class Greeter<T> implements Config {
+    private tag!: string;
+    constructor(private level: number) { this.tag = "g"; }
+    greet(name: string): string { return "hi " + name + this.level; }
+    pick(cb: (x: number) => number): number { return cb(this.level); }
+  }
+  const g = new Greeter(3);
+  console.log("ts enum " + Mode.On + " " + Mode[2] + " " + Mode.Named);
+  console.log("ts greet " + g.greet("bob"));
+  console.log("ts pick " + g.pick((x: number): number => x * 2));
+  console.log("ts cast " + (g as any).tag + " " + g.tag!);
+</script>
+<script>
+  console.log("plain js still runs after ts");
+</script>
+</body></html>

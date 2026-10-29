@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>CWebView Layout Test</title></head>
+<body style="background-color:#101827;color:#f8fafc">
+  <h1>Layout Test</h1>
+  <p>Each container should end at its content. Buttons should be only as wide as their labels.</p>
+
+  <div style="background-color:#1d4ed8;color:#ffffff;padding:12px">
+    <h2>Short container</h2>
+    <p>This blue background should be exactly as tall as its content and padding.</p>
+  </div>
+
+  <div style="background-color:#7c3aed;color:#ffffff;padding:12px">
+    <h2>Nested content</h2>
+    <div style="background-color:#9333ea;padding:8px">
+      <p>Nested div content should not add an extra line-height to either background.</p>
+    </div>
+  </div>
+
+  <div style="background-color:#334155;color:#ffffff;padding:8px">
+    <button>SHORT</button>
+    <button>PRESS ME</button>
+    <button>This button has a longer label</button>
+  </div>
+
+  <button style="display:block">BLOCK BUTTON</button>
+  <button style="display:inline-block">INLINE-BLOCK BUTTON</button>
+  <button style="display:inline">INLINE BUTTON</button>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CWebView Launcher</title>
+  <style>
+    body { background-color: #101827; color: #f8fafc; font-family: sans-serif; padding: 16px; }
+    header { background-color: #243b53; padding: 12px; }
+    a { color: #7dd3fc; }
+    .panel { background-color: #1e293b; padding: 12px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CWebView</h1>
+    <p id="platform">Detecting platform…</p>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>Controls for this device</h2>
+      <p id="controls">Platform controls will appear here.</p>
+    </section>
+    <section class="panel">
+      <h2>Pages and tests</h2>
+      <p><a href="index.html">Open the app's configured home page</a></p>
+      <p><a href="buttons.html">Buttons and input test</a></p>
+      <p><a href="layout_test.html">Layout test</a></p>
+      <p><a href="scroll_region.html">Scrolling test</a></p>
+      <p><a href="es6_test.html">JavaScript compatibility test</a></p>
+    </section>
+  </main>
+  <script>
+    (function () {
+      var p = (window.navigator && navigator.platform) ? navigator.platform : "Unknown platform";
+      var controls = "Use the device's normal touch or pointer input. Open CWMenu for settings and navigation.";
+      if (p.indexOf("Vita") >= 0) {
+        controls = "Front touchscreen: touch and drag page content. Rear touchpad: optional visual pointer (Settings > Controls). D-pad: navigate focused controls. Cross: activate. Circle: back/menu action where configured. START: system/app action depends on the build.";
+      } else if (p.indexOf("Wii U") >= 0) {
+        controls = "Wii U GamePad / supported pointer input: point and select. D-pad: menu navigation. A: activate. B: back/cancel. Open CWMenu using the configured console shortcut.";
+      } else if (p.indexOf("Wii") >= 0) {
+        controls = "Wii Remote IR pointer: point; A: activate. D-pad: menu navigation/scroll. HOME: menu. Exact mappings can vary by controller and build.";
+      } else if (p.indexOf("Windows") >= 0) {
+        controls = "Mouse move/click: pointer and activate. Right-click or F1: CWMenu. F11: fullscreen. Wheel: scroll. Ctrl+wheel or Ctrl++ / Ctrl+-: zoom; Ctrl+0: reset. Tab: focus cycle. Enter/Space: activate. Esc: clear focus. F5 or Ctrl+R: reload.";
+      }
+      document.getElementById("platform").textContent = "Platform: " + p;
+      document.getElementById("controls").textContent = controls;
+    }());
+  </script>
+</body>
+</html>

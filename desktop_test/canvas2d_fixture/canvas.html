@@ -1,0 +1,81 @@
+<!doctype html><html><body>
+<canvas id="surface" width="32" height="24"></canvas>
+<canvas id="resize-check" width="4" height="4"></canvas>
+<script>
+var surface = document.getElementById("surface");
+if (surface.width !== 32 || surface.height !== 24) throw new Error("Canvas dimensions incorrect");
+var ctx = surface.getContext("2d");
+if (!ctx) throw new Error("Canvas 2D context missing");
+ctx.fillStyle = "#123456";
+ctx.fillRect(0, 0, 8, 8);
+/* A second getContext must return the same context and preserve state. */
+if (surface.getContext("2d") !== ctx) throw new Error("Canvas context identity changed");
+surface.getContext("2d").fillRect(8, 0, 1, 1);
+ctx.clearRect(0, 0, 2, 2);
+ctx.fillStyle = "#ff0000";
+ctx.globalAlpha = 0.5;
+ctx.fillRect(4, 4, 1, 1);
+ctx.globalAlpha = 1;
+ctx.fillStyle = "#123456";
+/* Huge but finite coordinates must be clipped before integer conversion. */
+ctx.fillRect(-1e300, 10, 1e301, 1);
+/* Invalid numeric arguments must be ignored safely. */
+ctx.fillRect(NaN, 0, 1, 1);
+ctx.clearRect(0, Infinity, 2, 2);
+ctx.strokeStyle = "#00ff00";
+ctx.lineWidth = 1;
+ctx.strokeRect(12, 2, 3, 3);
+/* Closed polygon fill uses an even-odd scanline rule. */
+ctx.fillStyle = "#0000ff";
+ctx.beginPath();
+ctx.moveTo(20, 6);
+ctx.lineTo(24, 6);
+ctx.lineTo(22, 10);
+ctx.closePath();
+ctx.fill();
+/* Curves are approximated by bounded line segments for this first version. */
+ctx.strokeStyle = "#ffff00";
+ctx.beginPath();
+ctx.moveTo(1, 15);
+ctx.quadraticCurveTo(3, 11, 5, 15);
+ctx.stroke();
+ctx.strokeStyle = "#ff00ff";
+ctx.beginPath();
+ctx.moveTo(10, 15);
+ctx.bezierCurveTo(11, 12, 13, 12, 14, 15);
+ctx.stroke();
+ctx.strokeStyle = "#00ffff";
+ctx.beginPath();
+ctx.arc(20, 16, 2, 0, Math.PI * 2, false);
+ctx.stroke();
+ctx.strokeStyle = "#ff8800";
+ctx.beginPath();
+ctx.moveTo(-100000000, 22);
+ctx.lineTo(100000000, 22);
+ctx.stroke();
+/* rect() appends a closed path that can be filled like other subpaths. */
+ctx.fillStyle = "#00aaff";
+ctx.beginPath();
+ctx.rect(26, 2, 4, 4);
+ctx.fill();
+/* save()/restore() preserve the supported drawing-state properties. */
+ctx.fillStyle = "#ff0000";
+ctx.save();
+ctx.fillStyle = "#0000ff";
+ctx.globalAlpha = 0.25;
+ctx.restore();
+ctx.fillRect(26, 10, 4, 4);
+var resetCanvas = document.getElementById("resize-check");
+var resetContext = resetCanvas.getContext("2d");
+resetContext.fillStyle = "#00ff00";
+resetContext.globalAlpha = 0.25;
+resetContext.save();
+resetContext.fillStyle = "#ff0000";
+resetCanvas.width = resetCanvas.width;
+resetContext.restore();
+if (resetCanvas.getContext("2d") !== resetContext ||
+    resetContext.fillStyle !== "#000000" || resetContext.globalAlpha !== 1 ||
+    resetContext.strokeStyle !== "#000000" || resetContext.lineWidth !== 1)
+    throw new Error("Canvas dimension assignment did not reset context state");
+</script>
+</body></html>

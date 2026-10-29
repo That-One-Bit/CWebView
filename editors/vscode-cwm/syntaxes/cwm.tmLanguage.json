@@ -1,0 +1,18 @@
+{
+  "scopeName": "source.cwm",
+  "patterns": [
+    {"include":"#comments"}, {"include":"#strings"}, {"include":"#directives"},
+    {"include":"#keys"}, {"include":"#colors"}, {"include":"#variables"},
+    {"include":"#numbers"}, {"include":"#booleans"}
+  ],
+  "repository": {
+    "comments": {"name":"comment.line.number-sign.cwm","match":"^\\s*#.*$"},
+    "strings": {"name":"string.quoted.double.cwm","begin":"\"","end":"\"","patterns":[{"name":"constant.character.escape.cwm","match":"\\\\."}]},
+    "directives": {"name":"keyword.control.cwm","match":"^\\s*(CWMenu|menu|element|theme|project|var|end|open_script|content|scrollbar|track|item|items|when)\\b"},
+    "keys": {"name":"support.type.property-name.cwm","match":"\\b(action|stops|brightness|tint|border|anchor|size|corner|crop|pair|scale)\\b(?=\\s)"},
+    "colors": {"name":"constant.other.color.cwm","match":"#[0-9A-Fa-f]{6}\\b"},
+    "variables": {"name":"variable.other.cwm","match":"\\$[A-Za-z_][A-Za-z0-9_.-]*"},
+    "numbers": {"name":"constant.numeric.cwm","match":"(?<![A-Za-z_$])[-+]?(?:\\d+\\.?\\d*|\\.\\d+)(?:[eE][-+]?\\d+)?"},
+    "booleans": {"name":"constant.language.boolean.cwm","match":"\\b(true|false|on|off|yes|no)\\b"}
+  }
+}

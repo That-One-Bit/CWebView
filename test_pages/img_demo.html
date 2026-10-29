@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image demo</title>
+<style>
+body { margin: 8px; font-size: 0.75em; }
+img { border: 1px solid #333333; }
+.box { width: 64px; height: 64px; background: #e8eef7 }
+</style>
+</head>
+<body>
+<h3>Image rendering</h3>
+<img src="pixel.png" alt="intrinsic size">
+<p>No width/height: the image uses its real pixel size.</p>
+<img src="pixel.png" width="32" height="16" alt="attrs">
+<p>width/height attributes stretch the box; with only ONE side the other
+side is derived so the aspect ratio survives, like Chrome.</p>
+<img src="pixel.png" style="width:48px;height:48px;object-fit:contain" alt="contain">
+<img src="pixel.png" style="width:48px;height:48px;object-fit:cover" alt="cover">
+<p>object-fit: contain letterboxes, cover crops.</p>
+<img src="http://example.com/pixel?size=32" alt="remote">
+<p>Internet images load with no JS (decoders are picked from the file's
+magic bytes, so extensionless URLs work).</p>
+<img src="missing.png" alt="broken image alt text">
+<p>A missing image draws a placeholder box with its alt text.</p>
+<img src="pixel.png" tabindex="3" alt="tabbable" style="width:24px;height:24px">
+<img src="pixel.png" alt="pixelated" style="width:48px;height:48px;image-rendering:pixelated">
+<a href="img_demo.html" tabindex="2">second link stop</a>
+<a href="img_demo.html" tabindex="1">first link stop</a>
+<p>tabindex=1, 2, 3 order the DPAD stops: positive tabindex first, then
+document order. Plain inline links are real stops now and get the focus
+ring, like an anchor in Chrome.</p>
+<div class="box" style="margin-top:-30px; z-index:5; background:#3366aa">z-index above</div>
+<div class="box" style="z-index:1; background:#aabb33">z-index below</div>
+<p>CSS z-index re-orders painting: the blue box overlaps the green one.</p>
+</body>
+</html>

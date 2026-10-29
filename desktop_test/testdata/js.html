@@ -1,0 +1,27 @@
+<html>
+<head><style>#box { border: 1px solid black; }</style></head>
+<body>
+<div id="out">before</div>
+<button id="go">Press me</button>
+<a id="lnk" href="other.html">a link</a>
+<a id="lnk2" href="second.html">plain link</a>
+<div id="box">stale</div>
+<script>
+console.log("script start");
+document.getElementById("out").textContent = "after";
+var box = document.getElementById("box");
+box.style.cssText = "border: 4px double #123456; background: #101828; color: #e8eef7; font-weight: bold;";
+box.textContent = "fresh";
+var all = document.querySelectorAll("#box, div");
+console.log("q count " + all.length);
+document.getElementById("out").hidden = true;
+document.getElementById("out").hidden = false;
+var b = document.getElementById("go");
+b.addEventListener("click", function () { console.log("button fired"); });
+var l = document.getElementById("lnk");
+l.addEventListener("click", function (e) { console.log("link intercepted"); e.preventDefault(); });
+setTimeout(function () { console.log("timer fired"); }, 0);
+console.log("done");
+</script>
+</body>
+</html>

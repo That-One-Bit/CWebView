@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>img test</title>
+<style>
+body { margin: 8px }
+img { border: 1px solid #333333 }
+</style>
+</head>
+<body>
+<img src="pixel.png" alt="red pixel">
+<img src="pixel.png" width="32" height="16" alt="attrs">
+<img src="./pixel.png" style="width:40px;height:20px" alt="css size">
+<img src="pixel.png" style="width:48px;height:48px;object-fit:contain" alt="contain">
+<img src="pixel.png" style="width:48px;height:48px;object-fit:cover" alt="cover">
+<img src="http://example.com/pixel?size=32" alt="remote">
+<img src="missing.png" alt="not found">
+<img src="missing.png">
+<img src="pixel.png" tabindex="3" alt="tabstop" style="width:24px;height:24px">
+<img src="pixel.png" alt="pixelated" style="width:48px;height:48px;image-rendering:pixelated">
+<a href="index.html" tabindex="2">second</a>
+<a href="index.html" tabindex="1">first</a>
+<div>after</div>
+<img src="pixel.png?pin=1" width="16" height="16" alt="query ref">
+</body>
+</html>

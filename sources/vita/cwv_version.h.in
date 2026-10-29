@@ -1,0 +1,14 @@
+#ifndef VITA_VERSION_H
+#define VITA_VERSION_H
+
+#define CWV_PRODUCTION_VERSION "@VITA_PRODUCTION_VERSION@"
+#define CWV_BUILD_VERSION "@VITA_BUILD_VERSION@"
+#define CWV_VERSION_DISPLAY CWV_PRODUCTION_VERSION " - " CWV_BUILD_VERSION
+
+/* (81) the app's own version, stamped in by build-vita.sh from the
+ * manifest "version" key; CMake passes it as a compile definition. */
+#ifndef CWV_APP_VERSION
+#define CWV_APP_VERSION "0.0"
+#endif
+
+#endif

@@ -1,0 +1,9 @@
+/* external sheet: rules + @font-face */
+@font-face { font-family: Fancy; src: url('fancy.ttf'); }
+.page { background: #101828; color: #e8eef7; padding: 8px 12px; }
+.page h1 { font-size: 1.5em; text-align: center; }
+.card { border: 2px solid #33445c; margin: 10px 4px; }
+.card, .note { display: block; }
+#hero { width: 400px; height: 60px; background: rgba(20,60,120,255); }
+.hidden { display: none; }
+a.linky:active { color: orange; }

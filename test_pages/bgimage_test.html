@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><title>Background image</title>
+<style>
+.tile { background-image: url("pixel.png"); width: 60px; height: 36px; }
+.shorthand { background: url(pixel.png) #cfe8ff; width: 60px; height: 24px; }
+</style>
+</head>
+<body>
+<p>CSS background-image tiling:</p>
+<div class="tile"></div>
+<p>Shorthand background: url() plus a color:</p>
+<div class="shorthand"></div>
+<p>A failed background-image logs to the console, color shows through:</p>
+<div style="background-image:url('missing_bg.png');width:120px;height:24px;background-color:#dddddd"></div>
+<p>And a missing img now shows the default failed-image glyph:</p>
+<img src="definitely_missing.png" alt="broken on purpose">
+</body></html>

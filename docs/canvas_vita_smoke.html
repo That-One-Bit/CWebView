@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CWebView Canvas 2D Cross-Platform Test</title>
+<style>
+body { background: #18202b; color: #f3f6fa; font-family: sans-serif; padding: 12px; }
+h1 { font-size: 22px; }
+p { font-size: 14px; }
+canvas { display: block; width: 300px; height: 150px; border: 2px solid #d9e2f0; background: #fff; }
+#status { padding: 8px; border: 1px solid #8290a3; }
+</style>
+</head>
+<body>
+<h1>CWebView Canvas 2D test</h1>
+<p>This page tests the current experimental Canvas 2D subset. Run it on each target platform; the scroll section is intentionally below the first viewport.</p>
+<canvas id="surface" width="300" height="150"></canvas>
+<p id="status">TEST RUNNING: waiting for JavaScript...</p>
+<p>Expected image: colored rectangles, a translucent yellow block, a white cut-out, a white outlined rectangle, a purple filled triangle, and cyan/yellow curved outlines.</p>
+<p>Supported here: getContext("2d"), fillStyle, strokeStyle, lineWidth, globalAlpha, fillRect, strokeRect, clearRect, beginPath, moveTo, lineTo, closePath, rect, save, restore, fill, stroke, quadraticCurveTo, bezierCurveTo, arc.</p>
+<script>
+(function () {
+    var status = document.getElementById("status");
+    var canvas = document.getElementById("surface");
+    var ctx;
+    try {
+        if (!canvas || typeof canvas.getContext !== "function") {
+            status.textContent = "FAIL: canvas element or getContext is missing.";
+            return;
+        }
+        ctx = canvas.getContext("2d");
+        if (!ctx) {
+            status.textContent = "FAIL: Canvas 2D is disabled. Check web/package.json for cwv-args: beta-enable-canvas.";
+            return;
+        }
+        ctx.fillStyle = "#1769aa";
+        ctx.fillRect(0, 0, 300, 150);
+        ctx.fillStyle = "#e53935";
+        ctx.fillRect(16, 16, 76, 54);
+        ctx.fillStyle = "#43a047";
+        ctx.fillRect(112, 16, 76, 54);
+        ctx.fillStyle = "#ffeb3b";
+        ctx.globalAlpha = 0.6;
+        ctx.fillRect(64, 82, 100, 50);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(202, 76, 70, 54);
+        ctx.clearRect(220, 16, 54, 54);
+        ctx.fillStyle = "#8e44ad";
+        ctx.beginPath();
+        ctx.moveTo(205, 24);
+        ctx.lineTo(248, 24);
+        ctx.lineTo(226, 64);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "#00bcd4";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(266, 44, 18, 0, Math.PI * 2, false);
+        ctx.stroke();
+        ctx.strokeStyle = "#ffca28";
+        ctx.beginPath();
+        ctx.moveTo(18, 116);
+        ctx.quadraticCurveTo(72, 72, 126, 116);
+        ctx.bezierCurveTo(146, 136, 164, 136, 184, 116);
+        ctx.stroke();
+        /* rect() and save/restore of the supported style state. */
+        ctx.fillStyle = "#ff8800";
+        ctx.save();
+        ctx.fillStyle = "#00ff00";
+        ctx.globalAlpha = 0.2;
+        ctx.restore();
+        ctx.beginPath();
+        ctx.rect(204, 132, 36, 12);
+        ctx.fill();
+        if (canvas.getContext("2d") !== ctx) {
+            status.textContent = "FAIL: repeated getContext did not return the same context.";
+            return;
+        }
+        status.textContent = "Canvas path API calls completed. Check the triangle, circle, curved line, colored shapes, and cut-out; then inspect CWV.log for the beta-enable-canvas message.";
+    } catch (e) {
+        status.textContent = "FAIL: JavaScript exception: " + String(e);
+    }
+}());
+</script>
+
+<hr>
+<h2>Canvas scrolling and redraw test</h2>
+<p>Scroll down until the second canvas is visible. The canvas should move with the page and stay aligned with the surrounding border. It must not remain fixed to the screen, jump, smear, or change size while scrolling. The colored bar should continue updating while this section is visible.</p>
+<div style="height:360px; background:#263445; border:2px solid #8290a3; padding:8px;">
+  <p>This intentionally tall spacer separates the canvases. Scroll through it at different speeds and stop partway through.</p>
+  <p>Check that the lower canvas enters and leaves the viewport normally, including when only part of it is visible.</p>
+</div>
+<p id="scroll-anchor">Lower canvas begins below the spacer.</p>
+<canvas id="scroll-surface" width="260" height="96" style="width:260px;height:96px;"></canvas>
+<p id="scroll-status">SCROLL TEST: waiting for JavaScript...</p>
+<p>Return to the top and scroll down again. The drawing should persist rather than reset. A moving bar should continue from its latest position after the canvas comes back into view.</p>
+<script>
+(function () {
+    var canvas = document.getElementById("scroll-surface");
+    var status = document.getElementById("scroll-status");
+    var ctx = canvas && canvas.getContext ? canvas.getContext("2d") : null;
+    var tick = 0;
+    if (!ctx) {
+        status.textContent = "SCROLL TEST FAIL: second canvas context unavailable.";
+        return;
+    }
+    ctx.fillStyle = "#17212e";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+    setInterval(function () {
+        var x;
+        tick = (tick + 1) % 50;
+        ctx.clearRect(4, 4, canvas.width - 8, canvas.height - 8);
+        ctx.fillStyle = "#17212e";
+        ctx.fillRect(4, 4, canvas.width - 8, canvas.height - 8);
+        x = 8 + tick * 4;
+        ctx.fillStyle = "#00d084";
+        ctx.fillRect(x, 20, 20, 52);
+        ctx.fillStyle = "#f5c542";
+        ctx.fillRect(8, 10, canvas.width - 16, 4);
+        status.textContent = "SCROLL TEST RUNNING: redraw " + tick + "/49. Check position, clipping, and persistence while scrolling.";
+    }, 250);
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<html>
+<body>
+<div id="fstat">pending</div>
+<script>
+/* fetch() must fail GRACEFULLY when the host has no network backend
+ * (desktop tests register none): callback runs with (-1, ""), the return
+ * value is false, a throwing callback cannot crash the app. */
+var ok = fetch("http://example.com/data", function (status, text) {
+    console.log("cb status=" + status + " len=" + text.length);
+    document.getElementById("fstat").textContent = "status=" + status;
+});
+console.log("fetch returned " + ok);
+fetch("http://example.com/x", function (status, text) {
+    throw new Error("boom");
+});
+console.log("still alive");
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ES6 self-test</title>
+  <style>
+    body { background-color:#101827; color:#f8fafc; padding:16px; font-family:sans-serif }
+    button { display:block; margin:8px 0 }
+    #summary { font-size:1.4em; font-weight:bold; background-color:#1d4ed8; padding:10px }
+  </style>
+</head>
+<body>
+  <h1>ES6 self-test</h1>
+  <p>This page is itself plain ES6: the transformer converts every script
+     before Duktape runs it. Each row below exercises one feature; the
+     summary turns green only when everything passes.</p>
+  <p id="summary">running...</p>
+  <button id="rerun">Re-run tests</button>
+  <script>
+    var passed = 0, failed = 0;
+
+    function t(name, fn) {
+        try {
+            if (fn()) { passed++; console.log("PASS " + name); }
+            else { failed++; console.log("FAIL " + name + " (wrong result)"); }
+        } catch (e) { failed++; console.log("FAIL " + name + " (threw)"); }
+    }
+
+    function run() {
+        passed = 0; failed = 0;
+
+        /* syntax the transformer converts */
+        t("let/const", () => { let a = 1; const b = 2; return a + b === 3; });
+        t("arrow functions", () => [1, 2, 3].map(x => x * 2).join(",") === "2,4,6");
+        t("template literals", () => { const n = 6; return `v${n}` === "v6"; });
+        t("for..of array", () => {
+            let s = "";
+            for (const ch of ["a", "b"]) s += ch;
+            return s === "ab";
+        });
+        t("for..of string", () => {
+            let s = "";
+            for (const ch of "ok") s += ch;
+            return s === "ok";
+        });
+
+        /* prelude library (standard ES6 globals) */
+        t("Map", () => { const m = new Map(); m.set("k", 5); return m.get("k") === 5 && m.size === 1; });
+        t("Set", () => { const s = new Set(); s.add(1); s.add(1); return s.size === 1; });
+        t("Array.find", () => [1, 2, 3].find(x => x === 2) === 2);
+        t("Array.findIndex", () => [1, 2, 3].findIndex(x => x === 3) === 2);
+        t("Array.includes", () => [1, 2].includes(2) === true);
+        t("Array.fill", () => [0, 0, 0].fill(7)[1] === 7);
+        t("String.startsWith", () => "abc".startsWith("ab") === true);
+        t("String.endsWith", () => "abc".endsWith("bc") === true);
+        t("String.includes", () => "abc".includes("b") === true);
+        t("String.repeat", () => "ab".repeat(3) === "ababab");
+        t("String.padStart", () => "ab".padStart(4, "0") === "00ab");
+        t("String.padEnd", () => "ab".padEnd(4, "0") === "ab00");
+        t("Object.assign", () => {
+            const o = Object.assign({}, { a: 1 }, { b: 2 });
+            return o.a === 1 && o.b === 2;
+        });
+        t("Number.isInteger", () => Number.isInteger(5) === true && Number.isInteger(5.5) === false);
+        t("Number.isFinite", () => Number.isFinite(1) === true && Number.isFinite(NaN) === false);
+        t("Math.sign", () => Math.sign(-3) === -1 && Math.sign(4) === 1);
+        t("Math.trunc", () => Math.trunc(7.9) === 7 && Math.trunc(-7.9) === -7);
+        t("Math.hypot", () => Math.hypot(3, 4) === 5);
+
+        const sum = document.getElementById("summary");
+        sum.textContent = `ES6 self-test: ${passed} passed, ${failed} failed`;
+        sum.style.cssText = failed === 0 ? "color:#34d399" : "color:#f87171";
+        console.log(`es6-selftest ${passed} passed ${failed} failed`);
+    }
+
+    run();
+    document.getElementById("rerun").addEventListener("click", () => run());
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><head><title>JS errors</title></head><body>
+<div id="out">js error probe</div>
+<script>
+  console.log("probe start");
+</script>
+<script>
+  function broken( { syntax error here
+</script>
+<script>
+  console.log("fifth script runs after syntax error");
+  nullPointer();
+</script>
+<script>
+  console.log("third script");
+  throw new Error("explicit throw");
+</script>
+<script>
+  console.log("fourth ran after previous errors");
+</script>
+</body></html>

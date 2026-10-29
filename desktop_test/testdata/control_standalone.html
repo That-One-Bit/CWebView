@@ -1,0 +1,36 @@
+<!doctype html>
+<html cwv-control-mode="standalone">
+<head>
+  <title>Standalone VCM</title>
+  <style>
+    .vcm-card {
+      display: inline-block;
+      padding: 10px;
+      margin: 6px;
+      border: 2px solid #777;
+      background: #eeeeee;
+      color: #111111;
+    }
+    .vcm-card:active {
+      background: #355f9b;
+      color: #ffffff;
+      border-color: #9fc5ff;
+    }
+    button:active {
+      background: #7a2f2f;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Standalone VCM</h1>
+  <p>
+    VCM means <code>vita control method</code>. Pressing a mapped Vita control
+    makes its element match <code>:active</code> until another VCM is pressed.
+  </p>
+  <a href="index.html" vcm="circle" cwv-control-modal="Circle / Back" class="vcm-card">Circle: Back</a>
+  <button vcm="cross" cwv-control-modal="Cross / Confirm" class="vcm-card">Cross: Press</button>
+  <button vcm="square" class="vcm-card">Square: Press</button>
+  <button vcm="triangle" class="vcm-card">Triangle: Press</button>
+</body>
+</html>

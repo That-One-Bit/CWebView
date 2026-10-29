@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Comment handling</title>
+<!-- head comment: must not appear anywhere -->
+<style>
+/* comment before a selector must not kill the rule */
+.hidden-by-css { display: none; }
+p { color: #1050a0; /* trailing comment inside a declaration */ }
+div { background-color: #ffe1e1; }
+</style>
+</head>
+<body>
+<!-- body comment -->
+<p>visible paragraph one</p>
+<!-- multi
+     line comment -->
+<div class="hidden-by-css">this must be display none</div>
+<div>styled box</div>
+<p id="out">plain</p>
+<script>
+// line comment with => arrow inside
+/* block comment
+   spanning lines */
+var x = 1; // trailing comment
+document.getElementById("out").textContent = "js-ok " + x;
+</script>
+</body>
+</html>

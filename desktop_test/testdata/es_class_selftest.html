@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Class self-test</title>
+<style>body { background-color:#101827; color:#f8fafc; padding:16px; font-family:sans-serif } #summary { font-size:1.4em; font-weight:bold } button { display:block; margin:8px 0 }</style></head>
+<body><h1>Class self-test</h1>
+<p>Constructor, inheritance, field ordering, accessors, comments and private-name execution. Private names currently map to ordinary properties; this does not test enforced privacy or full ECMAScript conformance.</p>
+<p id="summary">running...</p><button id="rerun">Re-run tests</button>
+<script>
+var passed=0, failed=0;
+function t(name,fn) { try { if (fn()) { passed++; console.log("PASS "+name); } else { failed++; console.log("FAIL "+name+" (wrong result)"); } } catch(e) { failed++; console.log("FAIL "+name+" (threw: "+e+")"); } }
+function run() { passed=0; failed=0;
+        t('constructor and method', function () { class A { constructor(x) { this.x=x; } value() { return this.x; } } return new A(7).value()===7; });
+        t('empty constructor params', function () { class A { constructor() { this.x=3; } value() { return this.x; } } return new A().value()===3; });
+        t('static method', function () { class A { static answer() { return 42; } } return A.answer()===42; });
+        t('instanceof chain', function () { class A {} class B extends A {} var b=new B(); return b instanceof B && b instanceof A; });
+        t('implicit derived constructor', function () { class A { constructor(x) { this.x=x; } } class B extends A {} return new B(8).x===8; });
+        t('super constructor arguments', function () { class A { constructor(x,y) { this.x=x+y; } } class B extends A { constructor(x) { super(x,2); } } return new B(5).x===7; });
+        t('empty super constructor', function () { class A { constructor() { this.x=9; } } class B extends A { constructor() { super(); } } return new B().x===9; });
+        t('empty super method', function () { class A { value() { return 4; } } class B extends A { value() { return super.value()+1; } } return new B().value()===5; });
+        t('super method arguments and receiver', function () { class A { constructor() { this.x=3; } value(n) { return this.x+n; } } class B extends A { value(n) { return super.value(n)+1; } } return new B().value(5)===9; });
+        t('paired accessors', function () { class A { get value() { return this.x||0; } set value(v) { this.x=v*2; } } var a=new A(); a.value=6; return a.value===12; });
+        t('ordinary get and set methods', function () { class A { get() { return 3; } set(v) { this.x=v; } } var a=new A(); a.set(8); return a.get()===3 && a.x===8; });
+        t('base fields before body', function () { class A { x=4; constructor() { this.seen=this.x; this.x=9; } } var a=new A(); return a.seen===4 && a.x===9; });
+        t('field declaration order', function () { class A { first=2; second=this.first+3; constructor() { this.seen=this.second; } } return new A().seen===5; });
+        t('derived fields after super', function () { class A { constructor() { this.x=2; } } class B extends A { x=7; y=this.x+1; constructor() { super(); this.seen=this.y; } } var b=new B(); return b.x===7 && b.y===8 && b.seen===8; });
+        t('implicit derived fields', function () { class A { constructor(x) { this.x=x; } } class B extends A { y=this.x+1; } return new B(6).y===7; });
+        t('instance fields are independent', function () { class A { items=[]; } var a=new A(),b=new A(); a.items.push(1); return a.items.length===1 && b.items.length===0; });
+        t('static inheritance', function () { class A { static x=5; static answer() { return this.x; } } class B extends A {} return B.x===5 && B.answer()===5; });
+        t('private field execution', function () { class A { #x=4; value() { return this.#x; } } return new A().value()===4; });
+        t('private method execution', function () { class A { #x=4; #inc(n) { return this.#x+n; } value() { return this.#inc(3); } } return new A().value()===7; });
+        t('member comments', function () { class A { /* before field */ x=3; // before method
+value() { return this.x; } // after last member
+} return new A().value()===3; });
+        t('literal hash preserved', function () { class A { #x=2; value() { return "this.#x"+this.#x; } } return new A().value()==="this.#x2"; });
+        t('arrow in method', function () { class A { x=5; value() { var f=(n)=>n+2; return f(this.x); } } return new A().value()===7; });
+var sum=document.getElementById("summary");
+sum.textContent="Class self-test: "+passed+" passed, "+failed+" failed";
+sum.style.cssText=failed===0 ? "color:#34d399" : "color:#f87171";
+console.log("class-selftest "+passed+" passed "+failed+" failed");
+}
+run(); document.getElementById("rerun").addEventListener("click",function() { run(); });
+</script></body></html>

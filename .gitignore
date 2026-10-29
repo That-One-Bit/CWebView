@@ -1,0 +1,57 @@
+# --- build output (unified tree, 2026-10-02) ---------------------------
+build/
+build-vita/
+build-wiiu/
+build-windows/
+# --- desktop test artifacts (rebuilt by the gates) ---------------------
+*.o
+*.obj
+*.exe
+*.vpk
+*.elf
+*.rpx
+*.dol
+desktop_test/harness_old
+desktop_test/harness_new
+desktop_test/harness_ref
+desktop_test/error_audit
+desktop_test/error_audit_asan
+desktop_test/es_editions_unit
+desktop_test/es_editions_asan
+desktop_test/es2015_test
+desktop_test/es2015_test_asan
+desktop_test/theme_test
+desktop_test/js_test
+desktop_test/unit
+desktop_test/unit_asan
+desktop_test/ts_unit
+desktop_test/ts_unit_asan
+desktop_test/bmp_unit
+desktop_test/paths_check
+desktop_test/menu_ui_test
+desktop_test/es2015_unit/unit
+desktop_test/es2015_unit/unit_asan
+desktop_test/outputs/old.txt
+desktop_test/outputs/new.txt
+desktop_test/outputs/diff.txt
+desktop_test/outputs/ref_run.txt
+desktop_test/outputs/ref_diff.txt
+desktop_test/outputs/webapp_run.txt
+desktop_test/webapp_trace.txt
+desktop_test/layout_trace.txt
+desktop_test/approot_test
+desktop_test/img_cache_test
+desktop_test/loghook_test
+desktop_test/menu_hotkey_test
+cwmenu_ui_fixture_*
+desktop_test/cursor_test
+desktop_test/cwmenu_unit
+# --- desktop harness binaries (rebuilt by the gates, 2026-10-03) ------
+desktop_test/harness_*
+desktop_test/user_test
+desktop_test/es6_test
+desktop_test/es2015_unit/a.out
+!desktop_test/harness_*.sh
+# --- python bytecode ---
+__pycache__/
+*.pyc

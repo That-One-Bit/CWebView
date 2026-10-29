@@ -1,0 +1,14 @@
+CWMenu 2
+theme
+    accent0 notacolor
+    broken slot line
+end
+menu probe
+element mystery-kind 10 10 50 50 normal "x"
+element button
+element button ten ten 50 50 normal "bad coords"
+element button 10 10 50 50 weird "unknown style"
+element button 10 10 50 50 normal "pair test" pair
+end
+menu
+element dangling 0 0 0 0 normal ""

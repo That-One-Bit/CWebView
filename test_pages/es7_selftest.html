@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ES7+ self-test</title>
+  <style>
+    body { background-color:#101827; color:#f8fafc; padding:16px; font-family:sans-serif }
+    button { display:block; margin:8px 0 }
+    #summary { font-size:1.4em; font-weight:bold; background-color:#1d4ed8; padding:10px }
+  </style>
+</head>
+<body>
+  <h1>ES7+ self-test</h1>
+  <p>Spread, destructuring, for-of patterns and pattern parameters -
+     the 2026-09-26 (48) transformer additions. The page itself is
+     plain ES7+: every script is converted to ES5 before Duktape runs
+     it. The summary turns green only when everything passes.</p>
+  <p id="summary">running...</p>
+  <button id="rerun">Re-run tests</button>
+  <script>
+    var passed = 0, failed = 0;
+
+    function t(name, fn) {
+        try {
+            if (fn()) { passed++; console.log("PASS " + name); }
+            else { failed++; console.log("FAIL " + name + " (wrong result)"); }
+        } catch (e) { failed++; console.log("FAIL " + name + " (threw)"); }
+    }
+
+    function run() {
+        passed = 0; failed = 0;
+
+        /* ---- object spread ------------------------------------------ */
+        t("obj spread basic", () => {
+            var src = { a: 1, b: 2 };
+            var o = { ...src, c: 3 };
+            return o.a === 1 && o.b === 2 && o.c === 3;
+        });
+        t("obj spread overwrite", () => {
+            var src = { x: 1 };
+            var o = { x: 9, ...src };
+            return o.x === 1;
+        });
+        t("obj spread overridden", () => {
+            var src = { x: 1 };
+            var o = { ...src, x: 9 };
+            return o.x === 9;
+        });
+        t("obj spread chains", () => {
+            var o = { ...{ a: 1 }, ...{ b: 2 } };
+            return o.a === 1 && o.b === 2;
+        });
+        t("obj spread nested", () => {
+            var inner = { v: 7 };
+            var o = { wrap: { ...inner, w: 1 } };
+            return o.wrap.v === 7 && o.wrap.w === 1;
+        });
+
+        /* ---- array + call spread ------------------------------------ */
+        t("array spread", () => [...[1, 2], ...[3, 4]].join(",") === "1,2,3,4");
+        t("call spread", () => {
+            function add3(a, b, c) { return a + b + c; }
+            return add3(...[1, 2, 3]) === 6;
+        });
+        t("spread with literals", () => {
+            function add4(a, b, c, d) { return a + b + c + d; }
+            return add4(1, ...[2, 3], 4) === 10;
+        });
+
+        /* ---- destructuring ------------------------------------------ */
+        t("var array destructure", () => {
+            var [a1, a2] = [5, 6];
+            return a1 === 5 && a2 === 6;
+        });
+        t("var object destructure", () => {
+            var { x: dx, y: dy } = { x: 1, y: 2 };
+            return dx === 1 && dy === 2;
+        });
+        t("var obj destructure shorthand", () => {
+            var { x } = { x: 11 };
+            return x === 11;
+        });
+        t("paren destructure obj", () => {
+            var ao1 = 0, ao2 = 0;
+            ({ a: ao1, b: ao2 } = { a: 6, b: 7 });
+            return ao1 === 6 && ao2 === 7;
+        });
+        t("paren destructure shorthand", () => {
+            var sh1 = 0;
+            ({ sh1 } = { sh1: 42 });
+            return sh1 === 42;
+        });
+
+        /* ---- for-of with patterns ------------------------------------ */
+        t("for-of array pattern", () => {
+            var s = 0;
+            for (var [k, v] of [["a", 1], ["b", 2]]) s += v;
+            return s === 3;
+        });
+        t("for-of pattern braced body", () => {
+            var s = "";
+            for (var [k, v] of [["a", 1], ["b", 2]]) { s += k; }
+            return s === "ab";
+        });
+
+        /* ---- pattern parameters -------------------------------------- */
+        t("params object pattern", () => {
+            function p3({ x, y }) { return x + y; }
+            return p3({ x: 1, y: 2 }) === 3;
+        });
+        t("params array pattern", () => {
+            function p4([m, n]) { return m * n; }
+            return p4([3, 4]) === 12;
+        });
+        t("params pattern with default", () => {
+            function pd({ x = 5 }) { return x; }
+            return pd({}) === 5 && pd({ x: 9 }) === 9;
+        });
+        t("params plain default", () => {
+            function d1(a = 5) { return a; }
+            return d1() === 5 && d1(2) === 2;
+        });
+        t("rest params", () => {
+            function r1(...xs) { return xs.length; }
+            return r1(1, 2, 3) === 3 && r1() === 0;
+        });
+        t("arrow array pattern param", () => {
+            var ap = ([a, b]) => a + b;
+            return ap([1, 2]) === 3;
+        });
+
+        const sum = document.getElementById("summary");
+        sum.textContent = `ES7 self-test: ${passed} passed, ${failed} failed`;
+        sum.style.cssText = failed === 0 ? "color:#34d399" : "color:#f87171";
+        console.log(`es7-selftest ${passed} passed ${failed} failed`);
+    }
+
+    run();
+    document.getElementById("rerun").addEventListener("click", () => run());
+  </script>
+</body>
+</html>

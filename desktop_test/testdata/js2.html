@@ -1,0 +1,14 @@
+<html cwv-control-mode="standalone" cwv-control-modal="Hold Cross">
+<style>
+#panel { border: 1px solid black; }
+#panel:active { background: #ff0000; }
+</style>
+<body>
+<div id="panel" vcm="cross">Hold Cross</div>
+<script>
+document.getElementById("panel").addEventListener("click", function () {
+    console.log("cross combo fired");
+});
+</script>
+</body>
+</html>

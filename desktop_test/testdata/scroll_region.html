@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Scroll regions</title>
+</head>
+<body>
+<h1>Per-element scroll regions</h1>
+<button id="topbtn">Top button</button>
+
+<!-- DOM-order region: joins the tab ring after the button. -->
+<div id="tall" style="height: 160px; overflow-y: auto; background: #eef3ff; border: 1px solid #8899cc;">
+  <p>Line one inside the tall region.</p>
+  <p>Line two of the scrollable content.</p>
+  <p>Line three keeps the box overflowing.</p>
+  <p>Line four is deeper down.</p>
+  <a id="deeplink" href="#deep">Deep link inside the region</a>
+  <p>Line five under the deep link.</p>
+  <p>Line six</p>
+  <p>Line seven</p>
+  <p>Line eight</p>
+  <p>Line nine</p>
+  <p>Line ten at the bottom of the region.</p>
+</div>
+
+<a id="afterlink" href="#after">After region link</a>
+
+<!-- Positive tabindex: forms the FIRST focus ring (Chrome order). -->
+<div id="wide" tabindex="5" style="height: 90px; overflow-x: scroll; background: #fff4ee; border: 1px solid #cc9988;">
+  <div style="width: 1800px; height: 40px; background: #ffe0cc;">Wide strip that overflows horizontally</div>
+</div>
+
+<!-- tabindex=-1: never enters the cycle, still clips its content. -->
+<div id="skipped" tabindex="-1" style="height: 80px; overflow-y: scroll; background: #eeffee; border: 1px solid #88cc88;">
+  <p>Skipped region line one</p>
+  <p>Skipped region line two</p>
+  <p>Skipped region line three</p>
+</div>
+
+<p id="bottom">Final paragraph below everything.</p>
+</body>
+</html>

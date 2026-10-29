@@ -1,0 +1,9 @@
+{
+  "name": "lost-in-firefly-forest-compatibility-prototype",
+  "version": "0.0.1-experimental",
+  "private": true,
+  "description": "Isolated CWebView compatibility fixture; not included in the current app's shipped web content.",
+  "webpage": "index.html",
+  "cwv-args": "beta-enable-canvas beta-enable-webgl",
+  "experimental": true
+}

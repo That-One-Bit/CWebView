@@ -1,0 +1,6 @@
+{
+  "CWMenu file": {"prefix":"cwmenu","body":["CWMenu 4","","theme","\taccent0 #466996","\ttext-normal #EBF0FA","\ttext-light #FFF8EE","\ttext-dim #9BA5B4","\tneutral #96A0AF","\toverlay #000000","end","","menu ${1:main}","\telement ${2:window} window 0 0 740 436 normal \"\" anchor 110 54 size 1.0 corner sharp","\telement ${3:back} button 20 376 150 38 normal \"Back\" action ${4:back}","end",""],"description":"Create a CWMenu 4 script"},
+  "Element": {"prefix":"element","body":"element ${1:name} ${2|button,text,header,footer,panel,slider,checkbox,segmented,list,badge,progress,value,icon,underline,decoration,shape_rectangle,shape_rounded_rectangle,shape_circle,line,scrollbar|} ${3:20} ${4:20} ${5:200} ${6:38} ${7|normal,light,dim|} \"${8:Label}\"${9: action ${10:action_name}}","description":"Add a CWMenu element"},
+  "Dynamic menu": {"prefix":"menu","body":["menu ${1:custom_menu}","\telement ${2:window} window 0 0 400 300 normal \"\"","\telement ${3:label} text 16 48 368 80 normal \"${4:Hello}\"","end"],"description":"Create a dynamic menu"},
+  "Conditional element": {"prefix":"when","body":"element ${1:name} text ${2:20} ${3:20} ${4:300} ${5:38} normal \"${6:Feature row}\" when ${7:feature}","description":"Add an element gated by a project feature"}
+}

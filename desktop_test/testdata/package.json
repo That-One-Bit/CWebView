@@ -1,0 +1,16 @@
+{
+  "name": "Webpage",
+  "titleId": "WEBWEBWEB",
+  "shorthand": "WEB",
+  "version": "00.10",
+  "author": "ThatOneBit",
+  "target": "CWebView",
+  "webpage": "index.html",
+  "vita": {
+    "icon": "",
+    "wallpaper": "",
+    "startLogo": "",
+    "storageDirectory": "Webpage"
+  },
+  "webappDirectory": "."
+}

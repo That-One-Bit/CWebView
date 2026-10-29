@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cwv ES6 + JavaScript demo</title>
+  <style>
+    body { background-color:#101827; color:#f8fafc; padding:24px; font-family:sans-serif }
+    h1 { margin-top:0 }
+    .card { background-color:#1d4ed8; padding:12px; margin:12px 0 }
+    .card p { margin:8px 0 }
+    #count { font-size:1.5em; font-weight:bold }
+    button { display:block; margin:6px 0 }
+  </style>
+</head>
+<body>
+  <h1>ES6 + JavaScript demo</h1>
+  <p>Every button below runs ES6 source natively via modules.</p>
+  
+  <div class="card">
+    <p id="count">Clicks: 0</p>
+    <button id="inc">Count +1 (arrow listener)</button>
+    <button id="scan">Scan list (for..of + Map + find)</button>
+    <button id="reset">Reset</button>
+  </div>
+  
+  <p id="out">output appears here</p>
+
+  <!-- Point this to your local ES6 Module entry script -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

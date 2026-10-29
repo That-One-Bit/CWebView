@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cwv ES6 + JavaScript demo</title>
+  <style>
+    body { background-color:#101827; color:#f8fafc; padding:24px; font-family:sans-serif }
+    h1 { margin-top:0 }
+    .card { background-color:#1d4ed8; padding:12px; margin:12px 0 }
+    .card p { margin:8px 0 }
+    #count { font-size:1.5em; font-weight:bold }
+    button { display:block; margin:6px 0 }
+  </style>
+</head>
+<body>
+  <h1>ES6 + JavaScript demo</h1>
+  <p>Every button below runs ES6 source: const/let, arrows, template literals, for..of, Map and Set. The ES6 module transpiles it to ES5 before Duktape runs it.</p>
+  
+  <div class="card">
+    <p id="count">Clicks: 0</p>
+    <button id="inc">Count +1 (arrow listener)</button>
+    <button id="scan">Scan list (for..of + Map + find)</button>
+    <button id="reset">Reset</button>
+  </div>
+  
+  <p id="out">output appears here</p>
+
+  <script>
+    /* The whole example is plain ES6: no build step, the module converts * let/const -> var, arrows -> functions and template literals -> concat * before the script is evaluated. */
+    
+    // FIX: Changed getElementsById to getElementById
+    var out = document.getElementById("out");
+    let clicks = 0;
+    
+    /* template literal + Map, filled with for..of */
+    const names = ["alpha", "beta", "gamma"];
+    const lookup = new Map();
+    let i = 0;
+    for (const n of names) {
+      i++;
+      lookup.set(n, i);
+    }
+    console.log(`map has ${lookup.size} entries`);
+
+    // FIX: Changed .on("activate") to .addEventListener("click")
+    // FIX: Changed .setText() to .textContent
+    // FIX: Changed .setStyle() to .style.cssText
+    document.getElementById("inc").addEventListener("click", () => {
+      clicks++;
+      document.getElementById("count").textContent = `Clicks: ${clicks}`;
+      out.style.cssText = "color:#34d399";
+    });
+
+    // FIX: Changed .on("activate") to .addEventListener("click")
+    // FIX: Changed .setText() to .textContent
+    document.getElementById("scan").addEventListener("click", () => {
+      const found = names.find((n) => n === "beta");
+      let line = "";
+      for (const ch of found) {
+        line += ch + " ";
+      }
+      out.textContent = `beta is #${lookup.get(found)}, chars: ${line}`;
+      console.log(`scan: ${found} is ${lookup.get(found)}`);
+      
+      const seen = new Set();
+      for (const n of names) seen.add(n[0]);
+      console.log(`set size ${seen.size}`);
+    });
+
+    // FIX: Changed .on("activate") to .addEventListener("click")
+    // FIX: Changed .setText() to .textContent
+    // FIX: Changed .setStyle() to .style.cssText
+    document.getElementById("reset").addEventListener("click", () => {
+      clicks = 0;
+      document.getElementById("count").textContent = "Clicks: 0";
+      out.style.cssText = "color:#f8fafc";
+      out.textContent = "output appears here";
+      console.log("reset");
+    });
+  </script>
+</body>
+</html>

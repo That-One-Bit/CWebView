@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CWebView Canvas 2D Smoke Test</title>
+  <style>
+    body { font-family: sans-serif; margin: 16px; background: #20232a; color: #f4f4f4; }
+    canvas { display: block; width: 320px; height: 180px; border: 1px solid #aaa; background: #fff; }
+    #status { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Canvas 2D smoke test</h1>
+  <p>Checks a real 2D context, fillStyle, fillRect, clearRect and repeated updates.</p>
+  <canvas id="screen" width="320" height="180"></canvas>
+  <p id="status">Starting…</p>
+  <script>
+    (function () {
+      var canvas = document.getElementById("screen");
+      var status = document.getElementById("status");
+      var ctx = canvas && canvas.getContext("2d");
+      var frame = 0;
+      if (!ctx) {
+        status.textContent = "FAIL: no Canvas 2D context. Check cwv-args and runtime support.";
+        return;
+      }
+      function paint() {
+        ctx.clearRect(0, 0, canvas.width || 320, canvas.height || 180);
+        ctx.fillStyle = "#182848";
+        ctx.fillRect(0, 0, 320, 180);
+        ctx.fillStyle = "#4fd1c5";
+        ctx.fillRect(12 + (frame % 250), 18, 46, 46);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(12, 82, 140, 4);
+        frame++;
+        status.textContent = "PASS: Canvas 2D context active; frames drawn: " + frame;
+      }
+      paint();
+      setInterval(paint, 250);
+    }());
+  </script>
+</body>
+</html>

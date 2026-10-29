@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app type="wiiu">
+  <name>CWebView</name>
+  <codename>CWebView</codename>
+  <short_name>CWebView</short_name>
+  <long_description>CWebView for Wii U: the shared CWebView HTML/CSS/JS engine (native renderer + Duktape) on the GamePad. Engine-first port; the native CWMenu shell comes later.</long_description>
+  <version>0.10</version>
+  <release_date>20260920</release_date>
+  <developers>
+    <dev><name>ThatOneBit</name><type>author</type></dev>
+  </developers>
+</app>
