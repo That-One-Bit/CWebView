@@ -1,0 +1,419 @@
+# CWMenu 3 - adds the `project` block (feature switches: cursor, zoom,
+# scroll, devtools, history - all ON by default) and `when <expr>` element
+# conditionals: the host injects the effective values (package.json keys)
+# via cwm_project_set() before load, then every element tagged with
+# `when <switch>` is dropped when the switch is off, so disabled features
+# remove their menu items entirely.  The controller parses ANY version
+# and ignores constructs newer than itself, so older hosts still load this.
+CWMenu 3
+
+# Theme block (CWMenu 2): the script owns every menu color slot.  These values
+# mirror the built-in C fallbacks exactly (zero visual change) - edit them
+# here to re-skin the whole native shell without touching C.
+#   accentN     accent colors used by Settings > Accent color
+#   labelN      display names for the same accents (label0 = accent0)
+#   text-normal/light/dim   text colors by element style
+#   neutral     the un-tinted chrome base
+#   overlay     menu backdrop rgb (alpha stays fixed in the host)
+theme
+    accent0 #466996
+    accent1 #B43737
+    accent2 #CD7030
+    accent3 #379155
+    accent4 #2D9BAF
+    accent5 #5C3787
+    label0 "Blue"
+    label1 "Red"
+    label2 "Orange"
+    label3 "Green"
+    label4 "Cyan"
+    label5 "Dark Purple"
+    text-normal #EBF0FA
+    text-light #FFF8EE
+    text-dim #9BA5B4
+    neutral #96A0AF
+    overlay #000000
+end
+
+# Project block (CWMenu 3): script-side DEFAULTS.  The host injects the
+# package.json values before load (cwm_project_set wins over these lines);
+# these defaults make the script self-describing when no host injects.
+project
+    cursor on
+    zoom on
+    scroll on
+    devtools on
+    history on
+    files on
+end
+
+menu main
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "CWebView"
+element devtools button 610 7 112 30 normal "DevTools" action devtools when devtools
+# (84) Files: web-content tree browser.  The host also draws this button
+# natively (one button-width left of devtools) for legacy scripts.
+element files button 486 7 112 30 normal "Files" action files when files
+element page-label text 20 62 80 24 normal "Page"
+element page-icon panel 20 94 70 70 normal ""
+element page-info text 104 94 560 70 normal ""
+element page-separator underline 20 180 700 1 normal ""
+# CWMenu 4: the More row opens a LINKED script (extras.cwm) whose menu
+# re-renders this same set of choices in the inline settings/devtools
+# grammar - the stock main menu above stays untouched.
+element page-operations button 20 204 700 42 normal "Page Operations" action page-operations
+element open-url button 20 242 700 42 normal "Open URL..." action open-url
+element settings button 20 280 700 42 normal "Settings" action settings
+element more button 20 318 700 42 normal "More" action open_script:extras.cwm|more_main
+element footer-separator underline 20 366 700 1 normal ""
+element back button 20 376 150 38 normal "Back" action back
+element footer footer 190 376 530 38 normal ""
+end
+
+menu page_operations
+# (42) modernized: rounded chrome + live URL/state values drawn by the
+# shared shell (same grammar as the settings tabs).
+element window window 0 0 740 436 normal "" corner rounded
+element header header 0 0 740 44 normal "Page Operations"
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal "Page Operations"
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item history-back
+  item forward
+  item reload
+}
+element history-back text 40 154 660 38 normal "Back" action history-back when history
+element forward text 40 196 660 38 normal "Forward" action forward when history
+element reload text 40 238 660 38 normal "Reload" action reload
+element section-accent decoration 40 154 660 3 normal "accent"
+element footer-separator underline 20 382 700 1 normal ""
+element menu-back button 20 392 150 38 normal "Back" action menu-back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu settings_appearance
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "Settings"
+element appearance-tab text 20 58 220 36 normal "Appearance" action appearance-tab
+element controls-tab text 244 58 220 36 normal "Controls" action controls-tab
+element preferences-tab text 468 58 232 36 normal "Preferences" action preferences-tab
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal "Appearance"
+element content-separator underline 40 148 660 1 normal ""
+element content-row-0 text 40 154 660 38 normal "Theme" action toggle_theme
+element content-row-1 text 40 196 660 38 normal "Accent color" action cycle_accent
+element content-row-2 slider 40 238 660 38 normal "Zoom level" action set_zoom stops 6 when zoom
+element content-row-3 text 40 280 660 38 normal "CSS cursors" action toggle_css_cursors
+element section-accent decoration 40 154 660 3 normal "accent"
+element content-status footer 40 322 660 20 normal ""
+element footer-separator underline 20 382 700 1 normal ""
+element undo button 20 392 150 38 normal "Undo" action undo
+element save button 180 392 150 38 normal "Save" action save
+element exit button 330 392 150 38 normal "Exit" action exit
+element footer footer 490 392 230 38 normal ""
+end
+
+menu settings_controls
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "Settings"
+element appearance-tab text 20 58 220 36 normal "Appearance" action appearance-tab
+element controls-tab text 244 58 220 36 normal "Controls" action controls-tab
+element preferences-tab text 468 58 232 36 normal "Preferences" action preferences-tab
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal "Controls"
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item content-row-0
+  item content-row-1
+  item content-row-2
+  item content-row-3
+  item content-row-4
+}
+element content-row-0 text 40 154 660 38 normal "Scroll input" action cycle_scroll_input when scroll
+element content-row-1 text 40 196 660 38 normal "Zoom input" action cycle_zoom_input when zoom
+element content-row-2 slider 40 238 660 38 light "Scroll speed" action set_scroll_speed stops $scroll_speed_stops when scroll
+element content-row-3 text 40 280 660 38 normal "D-pad focus"
+# Vita-only back-touchpad cursor toggle, shown only when the project has a
+# cursor at all (`when cursor`); the shared menu shell additionally skips
+# this action (cursor_toggle stays 0) - Vita's legacy settings UI owns the
+# behavior itself.
+element content-row-4 text 40 322 660 38 normal "Touchpad pointer" action cycle_pointer when cursor
+element section-accent decoration 40 154 660 3 normal "accent"
+element content-status footer 40 322 660 20 normal ""
+element footer-separator underline 20 382 700 1 normal ""
+element undo button 20 392 150 38 normal "Undo" action undo
+element save button 180 392 150 38 normal "Save" action save
+element exit button 330 392 150 38 normal "Exit" action exit
+element footer footer 490 392 230 38 normal ""
+end
+
+menu settings_preferences
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "Settings"
+element appearance-tab text 20 58 220 36 normal "Appearance" action appearance-tab
+element controls-tab text 244 58 220 36 normal "Controls" action controls-tab
+element preferences-tab text 468 58 232 36 normal "Preferences" action preferences-tab
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal "Preferences"
+element content-separator underline 40 148 660 1 normal ""
+element content-row-0 text 40 154 660 38 normal "Data namespace"
+element content-row-1 text 40 196 660 38 normal "Clear cache" action clear_cache
+element content-row-2 text 40 238 660 38 normal "Reset preferences" action reset_preferences
+# Wii U only: Vita's existing settings UI ignores these extension rows.
+element content-row-3 text 40 280 660 38 normal "Menu shortcut" action cycle_menu_hotkey
+element content-row-4 text 40 322 660 38 normal "Show Exit App" action toggle_exit_app
+element section-accent decoration 40 154 660 3 normal "accent"
+element footer-separator underline 20 382 700 1 normal ""
+element undo button 20 392 150 38 normal "Undo" action undo
+element save button 180 392 150 38 normal "Save" action save
+element exit button 330 392 150 38 normal "Exit" action exit
+element footer footer 490 392 230 38 normal ""
+end
+
+menu devtools_performance
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item content-section-1
+  item content-section-2
+  item content-section-3
+}
+element content-section-1 text 40 162 660 38 normal "FPS"
+element content-section-2 text 40 204 660 38 normal "Frames / frame time"
+element content-section-3 text 40 246 660 38 normal "Scroll / zoom"
+element section-accent decoration 40 154 660 3 normal "accent"
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_renderer
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item engine
+  item viewport
+  item dom-nodes
+  item js-state
+  item last-error
+}
+element engine text 40 154 660 38 normal "Engine"
+element viewport text 40 196 660 38 normal "Viewport"
+element dom-nodes text 40 238 660 38 normal "DOM nodes"
+element js-state text 40 280 660 38 normal "JS state"
+element last-error text 40 322 660 38 normal "Last JS error"
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_input
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item control-mode
+  item scroll-zoom
+  item last-btn
+  item dpad-focus
+}
+element control-mode text 40 154 660 38 normal "Control mode"
+element scroll-zoom text 40 196 660 38 normal "Scroll / zoom input"
+element last-btn text 40 238 660 38 normal "Last button"
+element dpad-focus text 40 280 660 38 normal "D-pad focus"
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_page
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item title
+  item url
+  item version
+  item console-stats
+  item js-state
+}
+element title text 40 154 660 38 normal "Title"
+element url text 40 196 660 38 normal "URL"
+element version text 40 238 660 38 normal "Version"
+element console-stats text 40 280 660 38 normal "Console"
+element js-state text 40 322 660 38 normal "JS state"
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_overrides
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+element content-row-0 text 40 154 660 38 normal "Control mode"
+element content-row-1 text 40 196 660 38 normal "Scroll input"
+element content-row-2 text 40 238 660 38 normal "Zoom input"
+element content-row-3 text 40 280 660 38 normal "Theme"
+element content-row-4 text 40 322 660 38 normal "Scrollbars"
+element content-row-5 text 40 364 660 38 normal "Zoom level"
+element content-row-6 text 40 406 660 38 normal "Button wait"
+content scrollbar {
+  track 708 154 5 214 normal
+  item content-row-0
+  item content-row-1
+  item content-row-2
+  item content-row-3
+  item content-row-4
+  item content-row-5
+  item content-row-6
+}
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_console
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+}
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_platform
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+content scrollbar {
+  track 708 154 5 214 normal
+  item native-renderer
+  item javascript-dom
+  item esm-module
+  item platform-status
+}
+element native-renderer text 40 154 660 38 normal "Native renderer"
+element javascript-dom text 40 196 660 38 normal "JavaScript / DOM"
+element esm-module text 40 238 660 38 normal "ESM module"
+element platform-status text 40 280 660 38 normal "Platform status"
+element cwm-script text 40 322 660 38 normal "CWMenu script"
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+menu devtools_close
+element window window 0 0 740 436 normal ""
+element header header 0 0 740 44 normal "DevTools"
+element performance text 20 58 112 36 normal "Performance" action performance
+element renderer text 136 58 92 36 normal "Renderer" action renderer
+element input text 232 58 72 36 normal "Input" action input
+element page text 308 58 68 36 normal "Page" action page
+element overrides text 380 58 94 36 normal "Overrides" action overrides
+element console text 478 58 78 36 normal "Console" action console
+element platform text 560 58 90 36 normal "Platform" action platform
+element close text 654 58 66 36 normal "Close" action close
+element content-panel panel 20 106 700 270 normal ""
+element content-title text 40 118 660 30 normal ""
+element content-separator underline 40 148 660 1 normal ""
+element close-message text 40 198 660 72 normal "Are you sure you want to exit?"
+element close-no button 40 264 170 44 normal "No" action close-no
+element close-yes button 230 264 170 44 normal "Yes" action close-yes
+element footer-separator underline 20 382 700 1 normal ""
+element back button 20 392 150 38 normal "Back" action back
+element footer footer 180 392 540 38 normal ""
+end
+
+# ---- CWMenu 2 window-spec demo: dual windows ---------------------------------
+# tests_windows is the navigable menu (tab 8 of the advanced page).  Its
+# window element carries the `pair` key, so tests_windows_pair renders as a
+# live second surface with its own anchor / size / corner / crop.  The five
+# toggle buttons live-edit the partner window at runtime - no C changes.
+
+# Partner surface for the dual-window demo.  THIS window element owns its
+# own geometry: absolute anchor 560,120, chrome scale 1.0, rounded corners,
+# no crop.  The host renders it through pair + vita_native_menu_find();
+# input stays with the active menu.

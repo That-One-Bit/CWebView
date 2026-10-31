@@ -354,6 +354,7 @@ static void page_button_reset_all(void){ memset(g_page_wait,0,sizeof(g_page_wait
  * The rear pad is read like the front one but only drives the cursor;
  * taps on release go through the same menu/page dispatch as a front tap. */
 static CwvCursor g_cursor;
+static int g_kbm_mouse_present;   /* last BT-mouse poll result (one poll per frame) */
 static int g_cursor_down, g_cursor_down_x, g_cursor_down_y;
 /* Cursor page mode (VCM_CURSOR) tap state - kept separate so the back
  * touchpad pointer and the D-pad cursor can never fight over one flag. */
@@ -3642,7 +3643,11 @@ int main(void)
 #if CWV_CURSOR_ENABLED
     cwv_cursor_place(&g_cursor,(float)SCREEN_W/2.0f,(float)SCREEN_H/2.0f,
                      SCREEN_W,SCREEN_H);
-    cwv_cursor_show(&g_cursor,g_menu.pointer);
+    /* Chrome-style: no pointer is drawn until a pointing device is
+     * actually used (rear pad touched, BT mouse present, or a Cursor-mode
+     * page).  It used to appear at screen centre at launch whenever the
+     * Settings toggle was on, even if nothing was pointing. */
+    cwv_cursor_show(&g_cursor,0);
 #endif
 
     /* CWMenu menu geometry and visual objects are declarative. Prefer a
@@ -4523,6 +4528,7 @@ int main(void)
         {
             CwvKbmVitaMouse km;
             cwv_kbm_vita_mouse_poll(&km);
+            g_kbm_mouse_present = km.present;
             if (km.present) {
                 char script[192];
                 cwv_cursor_place(&g_cursor,(float)km.x,(float)km.y,
@@ -4610,7 +4616,29 @@ int main(void)
                  * can see where the rear-pad pointer was left. */
                 cwv_cursor_show(&g_cursor,1);
             }
-        } else if(g_cursor.visible) cwv_cursor_show(&g_cursor,0);
+        } else if(g_cursor.visible && !g_kbm_mouse_present &&
+                  effective_control_mode(host)!=VCM_CURSOR) {
+            /* Rear-pad pointer turned off: hide it - but never kill the
+             * pointer of a Cursor-mode page (stick/D-pad driven) or a BT
+             * mouse, which do not depend on that setting.  Hiding it here
+             * every frame made Cursor mode lose its position (taps snapped
+             * to screen centre) whenever the toggle was off. */
+            cwv_cursor_show(&g_cursor,0);
+        }
+        {
+            /* The pointer belongs to the rear pad / mouse / Cursor-mode
+             * pages only.  Hide it when the user switches to direct front
+             * touch, or when the page leaves Cursor mode, like a browser
+             * hiding the mouse pointer on touch input. */
+            static int s_was_cursor_mode = 0;
+            int hvcm = effective_control_mode(host);
+            int mouse_here = g_kbm_mouse_present;   /* from the poll above */
+            if (!mouse_here && !g_cursor_down && hvcm != VCM_CURSOR) {
+                if (touch.reportNum > 0 || (s_was_cursor_mode && g_cursor.visible))
+                    cwv_cursor_show(&g_cursor,0);
+            }
+            s_was_cursor_mode = (hvcm == VCM_CURSOR);
+        }
 #endif /* CWV_CURSOR_ENABLED */
 
         if(g_menu.exit_requested) break;

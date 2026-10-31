@@ -1957,11 +1957,11 @@ static void layout_block(CwvRenderer *r, CwvNode *n, int child_start,
     }
     if (n->h > 0.0f) own_h = n->h;
 
-    /* Buttons default to inline-block and shrink-to-fit their label. When
-       CSS explicitly sets display:block, however, the control follows normal
-       block sizing and fills the containing content width unless width is
-       specified. Keep this separate from the inline-block sizing path. */
-    if (n->is_button && n->display_mode != 0 && n->w <= 0.0f) {
+    /* A <button> is sized by its content even with display:block: unlike a
+       <div>, Chrome gives it fit-content width, so it never stretches to the
+       end of its container.  (layout_block() is only reached for
+       display_mode == 0, so a `display_mode != 0` test here is never true.) */
+    if (n->is_button && n->w <= 0.0f) {
         float fit_w = 0.0f;
         for (i = child_start; i < r->node_count; i++) {
             CwvNode *child = &r->nodes[i];
@@ -1983,7 +1983,9 @@ static void layout_block(CwvRenderer *r, CwvNode *n, int child_start,
     if (n->is_button) {
         /* Anchor the label to this button's own border box, not the page's
            left edge. Block buttons may be centered, positioned, or nested. */
-        float inner_x = n->x + n->padding_left + n->border_width;
+        /* n->x is never assigned on the block path (the box node holds the
+           position), so anchor to the box's real x: page_left. */
+        float inner_x = r->page_left + n->padding_left + n->border_width;
         float inner_w = (n->w > 0.0f ? n->w : (float)r->width - r->page_left - r->page_right) -
                         n->padding_left - n->padding_right - n->border_width * 2.0f;
         if (inner_w < 0.0f) inner_w = 0.0f;

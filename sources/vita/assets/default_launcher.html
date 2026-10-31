@@ -1,0 +1,30 @@
+<!doctype html>
+<!-- CWebView default launch page (2026-10-06 (78)). This file IS the
+     generated launcher: the Vita build substitutes the APP_NAME and
+     WEBPAGE tokens below and stages the result into the VPK as
+     __vita_default_launcher.html when the manifest sets launchPage to
+     the empty string. Edit freely - plain HTML on the engine it
+     ships to. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{APP_NAME}}</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #15171a; color: #f2f2f2; }
+  body { text-align: center; font-family: sans-serif; }
+  .card { margin: 64px 40px; padding: 28px; background: #24272c; text-align: center; }
+  .card h1 { margin: 0 0 12px; font-size: 2em; }
+  .card p { margin: 0 0 24px; color: #c8ccd1; }
+  .open { display: inline-block; padding: 12px 22px; margin: 6px;
+          background: #3d78c9; color: #fff; text-decoration: none; }
+  .open:active { background: #2d5a98; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>{{APP_NAME}}</h1>
+    <p>CWebView application</p>
+    <a class="open" href="{{WEBPAGE}}" cwv-target="app">Open application</a>
+  </div>
+</body>
+</html>

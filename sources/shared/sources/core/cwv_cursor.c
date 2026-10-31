@@ -202,6 +202,14 @@ void cwv_cursor_draw(const CwvCursor *c)
         if (c->style == CWV_CSTYLE_URL) {
             /* custom art anchors at its CSS hotspot */
             hx = c->style_hot_x; hy = c->style_hot_y;
+        } else if (c->style_art && (c->style == CWV_CSTYLE_POINTER ||
+                                    c->style == CWV_CSTYLE_HELP)) {
+            /* Chrome parity: arrow-shaped pack art (the pointing hand and
+             * the help arrow) hit with their TIP (top-left), so the thing
+             * you point at is what you see.  Symmetric styles (text beam,
+             * crosshair, move, wait, grab, zoom, not-allowed) stay
+             * center-anchored like Chrome's. */
+            hx = 0; hy = 0;
         } else if (c->hotspot == CWV_CURSOR_CENTER) {
             hx = w / 2; hy = h / 2;
         } else {

@@ -1,0 +1,41 @@
+# CWMenu 4 - LINKED script (opened by the main menu's More row through the
+# `open_script:extras.cwm|more_main` action).  This file demonstrates the
+# linking feature: the host loads it INTO the state default.cwm built, every
+# `menu <name>` block here replaces that menu, and theme/project/vars merge.
+# A linked script may therefore re-skin or extend single menus without
+# rewriting the whole shell.  This menu is a "modified main menu": the same
+# row set as the stock main menu (page operations, open URL, settings,
+# devtools, live page meta) laid out in the inline settings/devtools grammar
+# - content panel, 42px rows, rounded chrome - so it can be compared
+# side-by-side without touching the real main menu.
+CWMenu 4
+
+# No theme block: inherits whatever default.cwm set.  Adding one here
+# would re-skin the whole shell while this script is linked (the demo
+# of "rendering it instead of the main").
+
+menu more_main
+element window window 0 0 740 436 normal "" corner rounded
+element header header 0 0 740 44 normal "CWebView"
+element content-panel panel 20 100 700 300 normal ""
+element content-title text 40 112 660 30 normal "More"
+element content-separator underline 40 142 660 1 normal ""
+# Live page meta strip (rendered live by the custom-menu pass: real
+# favicon, title, url and control mode - the main menu's identity card
+# restyled inline).
+element page-label text 40 148 660 20 normal "Page"
+element page-icon panel 40 172 56 56 normal ""
+element page-info text 106 172 594 56 normal ""
+element meta-separator underline 40 238 660 1 normal ""
+# The stock main menu's row set, inline (42px rhythm like the settings
+# tabs) - these dispatch through the SAME shared actions, so the rows
+# behave exactly like their main-menu counterparts.
+element content-row-0 text 40 246 660 38 normal "Page Operations" action page-operations
+element content-row-1 text 40 284 660 38 normal "Open URL..." action open-url
+element content-row-2 text 40 322 660 38 normal "Settings" action settings
+element content-row-3 text 40 360 660 38 normal "DevTools" action devtools when devtools
+element section-accent decoration 40 246 660 3 normal "accent"
+# action bar + hint, matching the settings footer grammar
+element menu-back button 20 404 160 28 normal "Back" action menu-back
+element footer footer 190 404 530 28 normal ""
+end

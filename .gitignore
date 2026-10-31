@@ -3,6 +3,8 @@ build/
 build-vita/
 build-wiiu/
 build-windows/
+web/
+webapp/
 # --- desktop test artifacts (rebuilt by the gates) ---------------------
 *.o
 *.obj

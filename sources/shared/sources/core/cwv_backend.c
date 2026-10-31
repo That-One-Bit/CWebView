@@ -1259,13 +1259,19 @@ static int backend_cursor_at(CwvBackend *backend, int x, int y,
             out->style = n->cursor_style;
             return 1;
         }
-        /* UA defaults, like a browser: pointer over links/buttons/
-           selects, text beam over textfields. */
-        if (n->is_link || n->is_button || n->is_select) {
+        /* UA defaults, matching Chrome's cursor:auto:
+         *   - native <button> and <select> keep the plain ARROW (Chrome
+         *     sets cursor:default on them; only links show the hand), even
+         *     when a button sits inside an <a>;
+         *   - a link only gets the HAND when it has a destination;
+         *   - textfields and ordinary text show the I-BEAM;
+         *   - everything else (boxes, images, empty space) is the arrow. */
+        if (n->is_button || n->is_select) return 0;
+        if (n->is_link && n->href[0]) {
             out->style = CWV_CSTYLE_POINTER;
             return 1;
         }
-        if (n->is_textfield) {
+        if (n->is_textfield || (n->text[0] && !n->is_image && !n->is_box)) {
             out->style = CWV_CSTYLE_TEXT;
             return 1;
         }

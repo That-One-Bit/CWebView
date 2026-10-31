@@ -600,9 +600,12 @@ static LRESULT CALLBACK wndproc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
                     case CWV_CSTYLE_HELP:
                         cur = LoadCursorW(NULL, (LPCWSTR)IDC_HELP); break;
                     case CWV_CSTYLE_MOVE:
+                        cur = LoadCursorW(NULL, (LPCWSTR)IDC_SIZEALL); break;
                     case CWV_CSTYLE_GRAB:
                     case CWV_CSTYLE_GRABBING:
-                        cur = LoadCursorW(NULL, (LPCWSTR)IDC_SIZEALL); break;
+                        /* Windows has no grab cursors; Chrome on Windows
+                         * shows the hand for these, not the 4-way move. */
+                        cur = LoadCursorW(NULL, (LPCWSTR)IDC_HAND); break;
                     case CWV_CSTYLE_NOT_ALLOWED:
                         cur = LoadCursorW(NULL, (LPCWSTR)IDC_NO); break;
                     case CWV_CSTYLE_NONE:
@@ -649,6 +652,23 @@ static void init_app_dir(void) {
             if (*p == '\\') *p = '/';
         snprintf(s_app_dir, sizeof(s_app_dir), "%s", exe);
     }
+}
+
+/* WM_SETCURSOR only arrives when the mouse MOVES.  Chrome re-evaluates the
+ * cursor whenever the content under a stationary pointer changes (wheel
+ * scroll, navigation, script changes), so re-run the handler each frame
+ * while the pointer really is over our client area. */
+static void refresh_cursor(void) {
+    POINT pt;
+    RECT rc;
+    if (!s_hwnd || GetForegroundWindow() != s_hwnd || GetCapture() != NULL)
+        return;
+    if (!GetCursorPos(&pt) || WindowFromPoint(pt) != s_hwnd) return;
+    GetClientRect(s_hwnd, &rc);
+    ScreenToClient(s_hwnd, &pt);
+    if (pt.x < 0 || pt.y < 0 || pt.x >= rc.right || pt.y >= rc.bottom) return;
+    SendMessageW(s_hwnd, WM_SETCURSOR, (WPARAM)s_hwnd,
+                 MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
 }
 
 int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
@@ -794,6 +814,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
             cwv_menu_ui_draw(&s_menu, &live);
         }
         cwv_win_frame_end(s_hwnd);
+        refresh_cursor();
 
         s_frame_count++;
         Sleep(16);   /* ~60 fps cap; the page renders on demand anyway */
